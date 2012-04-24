@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name           AddCommentToJiraIssue
+// @name           Jira Issue Comment Button
 // @namespace      taksan
 // @description    Adds a comment to the current open issue
 // @include        https://jira.objective.com.br/browse/*
