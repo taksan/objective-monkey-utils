@@ -9,6 +9,7 @@
 
 var USERNAME_PROP = 'jenkins_username';
 var PASSWORD_PROP = 'jenkins_password';
+$('head').append('<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/black-tie/jquery-ui.css" rel="stylesheet" type="text/css"/>');
 
 main()
 
@@ -55,35 +56,36 @@ function getCredentials()
 
 function askCredentialsAndStorePassword()
 {
-	var userInput = $("<input type='text' name='jenkins_username'>");
-	var passInput = $("<input type='password' name='jenkins_password'>");
+    var userInput = $("<input type='text' name='jenkins_username'>");
+    var passInput = $("<input type='password' name='jenkins_password'>");
 
-	var diagContent = 
-		$("<div style='background: white; padding: 10px; border: 1px solid black'> Enter credentials to save:<br/> </div>").
-		append("Username:").
-		append(userInput).
-		append("<br/>").
-		append("Password:").
-		append(passInput);
+    var diagContent =
+        $("<div></div>").
+        append("Username:<br/>").
+        append(userInput).
+        append("<br/>").
+        append("Password:</br>").
+        append(passInput);
 
-	diagContent.dialog({
+    diagContent.dialog({
+			title: 'Enter jenkins credentials',
             buttons: {
                 "Ok": function() {
-					GM_setValue(USERNAME_PROP, userInput.val());
-					GM_setValue(PASSWORD_PROP, passInput.val());
-					var res = {
-						j_username: userInput.val(),
-						j_password: passInput.val()
-					}
+                    GM_setValue(USERNAME_PROP, userInput.val());
+                    GM_setValue(PASSWORD_PROP, passInput.val());
+                    var res = {
+                        j_username: userInput.val(),
+                        j_password: passInput.val()
+                    }
 
-					$(this).dialog('close')
-					doLogin(res);
+                    $(this).dialog('close')
+                    doLogin(res);
                 },
                 "Cancel": function() {
-					$(this).dialog('close')
+                    $(this).dialog('close')
                     return null;
                 }
             }
-        }); 
+        });
 	return null;
 }
