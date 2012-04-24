@@ -14,14 +14,19 @@ main()
 
 function main()
 {
-	if ($('#login-field').text().trim()!='log in') {
+	if (isLoggedIn()) {
 		return;
 	}
 
 	var credentials = getCredentials();
 	if (credentials == null)
 		return;
+
 	doLogin(credentials);
+}
+
+function isLoggedIn() {
+	return  ($('#login-field').text().trim()!='log in'); 
 }
 
 function doLogin(credentials)
@@ -38,7 +43,7 @@ function getCredentials()
 	var username = GM_getValue(USERNAME_PROP, null);
 	var password = GM_getValue(PASSWORD_PROP, null);
 	if (username == null) {
-		return storePassword();
+		return askCredentialsAndStorePassword();
 	}
 
 	return {
@@ -48,12 +53,13 @@ function getCredentials()
 }
 
 
-function storePassword()
+function askCredentialsAndStorePassword()
 {
 	var userInput = $("<input type='text' name='jenkins_username'>");
 	var passInput = $("<input type='password' name='jenkins_password'>");
 
-	var diagContent = $("<div style='background: white; padding: 10px; border: 1px solid black'> Enter credentials to save:<br/> </div>").
+	var diagContent = 
+		$("<div style='background: white; padding: 10px; border: 1px solid black'> Enter credentials to save:<br/> </div>").
 		append("Username:").
 		append(userInput).
 		append("<br/>").
