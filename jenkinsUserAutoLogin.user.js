@@ -32,7 +32,7 @@ function isLoggedIn() {
 
 function doLogin(credentials)
 {
-	$.post('http://autotelebuild/hudson/j_acegi_security_check',
+	$.post('/j_acegi_security_check',
  		credentials,
         function(data) {
                   document.location.reload();
