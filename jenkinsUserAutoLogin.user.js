@@ -32,11 +32,15 @@ function isLoggedIn() {
 
 function doLogin(credentials)
 {
-	$.post('/j_acegi_security_check',
+	$.post('/hudson/j_acegi_security_check',
  		credentials,
         function(data) {
-                  document.location.reload();
-    });
+        	document.location.reload();
+    }).error(function() { 
+		GM_deleteValue(USERNAME_PROP)
+		mgs = '<span style="color:red">The auto login failed. Perhpas the password changed?</span>'
+		askCredentialsAndStorePassword(msg);
+	})
 }
 
 function getCredentials()
@@ -54,7 +58,7 @@ function getCredentials()
 }
 
 
-function askCredentialsAndStorePassword()
+function askCredentialsAndStorePassword(extra)
 {
     var userInput = $("<input type='text' name='jenkins_username'>");
     var passInput = $("<input type='password' name='jenkins_password'>");
@@ -66,6 +70,9 @@ function askCredentialsAndStorePassword()
         append("<br/>").
         append("Password:</br>").
         append(passInput);
+	if (extra != null) {
+		diagContent.append("<br/>"+extra);
+	}
 
     diagContent.dialog({
 			title: 'Enter jenkins credentials',
