@@ -1,45 +1,56 @@
 // ==UserScript==
-// @name           Jenkins Auto Login
-// @namespace      taksan
-// @description    	Auto Logins if not logged in
-// @include        	http://autotelebuild/hudson/*
-// @require        	http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js
-// @require			http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js
+// @name        Jenkins release with my credentials
+// @namespace   objective
+// @description Release the maven project with your credentials
+// @include     http://autotelebuild/hudson/job/*
+// @require     http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js
+// @require		http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js
+// @require     https://raw.github.com/taksan/objective-monkey-utils/master/jiraToolbar.js
+// @version     1
 // ==/UserScript==
 
 var USERNAME_PROP = 'jenkins_username';
 var PASSWORD_PROP = 'jenkins_password';
-$('head').append('<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/black-tie/jquery-ui.css" rel="stylesheet" type="text/css"/>');
-
 main()
 
 function main()
 {
-	if (isLoggedIn()) {
-		return;
+	if ($('[href$="m2release"]').size()==0) {
+		return
 	}
 
-	var credentials = getCredentials();
-	if (credentials == null)
-		return;
+	$('head').append('<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/black-tie/jquery-ui.css" rel="stylesheet" type="text/css"/>');
 
-	doLogin(credentials);
+
+	b = $('<input type="button" value="Release with my credentials">').click(function() {
+		var credentials = getCredentials();
+		if (credentials == null)
+			return;
+
+		doRelease(credentials);
+     })
+
+	addToToolbar(b)
 }
 
-function isLoggedIn() {
-	return  ($('#login-field').text().trim()!='log in'); 
-}
-
-function doLogin(credentials)
+function doRelease(credentials)
 {
-	$.post('/hudson/j_acegi_security_check',
- 		credentials,
-        function(data) {
-        	document.location.reload();
-    }).error(function() { 
+	m2releaseData = {
+		versioningMode: 'auto',
+		specifyScmCredentials: "on",
+		scmUsername: credentials.j_username,
+		scmPassword: credentials.j_password
+	}
+
+	$.post('m2release/submit',
+ 		m2releaseData,
+		function(m2releaseData) {
+			document.location.reload();
+		}
+	).error(function(s) { 
 		GM_deleteValue(USERNAME_PROP)
-		mgs = '<span style="color:red">The auto login failed. Perhpas the password changed?</span>'
-		askCredentialsAndStorePassword(msg);
+		msg = '<span style="color:red">The release failed. Perhaps the password changed?</span>'
+		askCredentialsAndStorePassword(msg)
 	})
 }
 
@@ -75,7 +86,7 @@ function askCredentialsAndStorePassword(extra)
 	}
 
     diagContent.dialog({
-			title: 'Enter jenkins credentials',
+			title: 'Enter SCM credentials',
             buttons: {
                 "Ok": function() {
                     GM_setValue(USERNAME_PROP, userInput.val());
@@ -86,7 +97,7 @@ function askCredentialsAndStorePassword(extra)
                     }
 
                     $(this).dialog('close')
-                    doLogin(res);
+                    doRelease(res);
                 },
                 "Cancel": function() {
                     $(this).dialog('close')
