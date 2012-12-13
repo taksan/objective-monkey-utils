@@ -3,6 +3,7 @@
  */
 .extra-info {
 	width: 150px;
+	text-transform:capitalize;
 }
 
 .reputation {
