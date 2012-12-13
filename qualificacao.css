@@ -141,5 +141,5 @@ p.rep5 span {
 }
 
 li.extra-info-condition, li.extra-info-sold, li.extra-info-location {
-	text-indent: 1.5em
+	padding-left: 1.5em
 }
