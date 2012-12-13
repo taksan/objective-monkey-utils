@@ -1,3 +1,9 @@
+/*
+ * Reputation formatting
+ */
+.extra-info {
+	width: 150px;
+}
 
 .reputation {
 	clear:both;
