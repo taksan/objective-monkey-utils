@@ -1,38 +1,8 @@
 
-
 header, footer, nav {
 	display:block;
 }
 
-.loadingIframe {
-	background-image:url(http://static.mlstatic.com/org-img/chico/img/loading.gif);
-	background-position:50% 50%;
-	background-repeat:no-repeat;
-}
-
-.typo {
-	font-family:"Trebuchet MS", Verdana, sans-serif!important;
-}
-
-.ch-mercadolider {
-	background-position:81px -324px;
-}
-
-.ch-mercadolider-gold {
-	background-position:82px -294px;
-}
-
-.ch-mercadolider-platinum {
-	background-position:73px -264px;
-}
-
-li.square {
-	list-style-type:square;
-}
-
-.ico.have, .status .info, .btn.primary, .ico.have, .status .info, .statusOk, .statusFail, .share a, .publi, .publiBr, .bpp, .ch-thumbail-zoom, .ch-viewervip-triggers .ch-thumbnail-on, .ch-viewervip-video span, .new-questions .ico-question, .new-questions .ico-answer, .new-questions .time-to-response, .new-questions .ico-time, .tips.motors, .tips.realestate {
-	background-image:url(http://vip.mlstatic.com/css/assets/vip-sprite-min__v304cb972025.png);
-}
 
 .normal {
 	font-weight:normal;
