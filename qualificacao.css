@@ -139,3 +139,7 @@ p.rep5 span {
     	padding:15px;
     	color:#eee;
 }
+
+li.extra-info-condition, li.extra-info-sold, li.extra-info-location {
+	text-indent: 1.5em
+}
