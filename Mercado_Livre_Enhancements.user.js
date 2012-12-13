@@ -1,10 +1,11 @@
 // ==UserScript==
-// @name        Mercado Livre Enhancements
+// @name        Mercado Livre Enhancement
 // @namespace   taksan
 // @include     http://*mercadolivre.com.br/*
 // @version     1
 // @require		http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js
 // @require		https://raw.github.com/taksan/objective-monkey-utils/master/keyboarNavigation.js
+// @require     http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js
 // ==/UserScript==
 
 main();
@@ -17,24 +18,65 @@ function main() {
 	$('#searchResults li').each(function(k,v) {
 		var adLink = $(v).find('a').attr('href');
 		if (adLink != null) {
-		   addActualCity(adLink, $(v).find('li.extra-info-location'));
+		   addExtraInfo(adLink, $(v).find('li.extra-info-location'));
 		}
 	})
-	$("head").append("<link rel='stylesheet' type='text/css' media='screen' href='http://vip.mlstatic.com/css/core__v304cb972025.gz.css'/>");
-	$("head").append("<link rel='stylesheet' type='text/css' media='screen' href='http://search-br.mlstatic.com/search-css/MLB/0.6.97/menu.min,main-v2,listview,bookmarks,mclics,apparel'/>");
+	addCssScript('https://raw.github.com/taksan/objective-monkey-utils/master/qualificacao.css');
 }
 
-function addActualCity(url, v) {
+function addExtraInfo(url, v) {
 	GM_xmlhttpRequest({
 	  method: "GET",
 	  url: url,
 	  onload: function(response) {
 	  	  var responseData = $(response.responseText);
+		  var sellerId = response.responseText.replace(/.*sellerId=([0-9]*).*/,"$1").trim()
 		  var actualLocation = responseData.find('dd.where').text().trim();
 		  $(v).text(actualLocation)
 		  var rep=responseData.find("p.meter")
 		  $(v).after(rep)
-		  console.log(rep.text())
-	  }
+		  sellerData="http://produto.mercadolivre.com.br/reputation/showLayer.html?sellerId="+sellerId+"&x=x";
+		  GM_xmlhttpRequest({
+			  method: "GET",
+			  url: sellerData,
+			  onload: function (response) {
+				var data = $(response.responseText);
+				var repTable = $(response.responseText).find('table').html();
+				repTable = repTable.replace('de negocia&ccedil;&otilde;es','')
+				repTable = repTable.replace(/Qualifica.*es positivas/,'Qual. Positivas')
+				repTable = repTable.replace('<th','<td');
+				repTable = repTable.replace('th>','td>');
+
+				$(rep).attr('title',repTable)
+				$(rep).tooltip();
+				$(rep).attr('title','')
+			  }
+		   })
+	  	}
 	});
+}
+
+function addCssScript(url) {
+	GM_xmlhttpRequest({
+	  method: "GET",
+	  url: url,
+	  onload: function (response) {
+	  	var css = response.responseText;
+		$("head").append("<style type='text/css'>\n"+
+			css +
+			".tooltip {\n"+
+    		"	display:none;\n"+
+    		"	background:transparent url(http://jquerytools.org/media/img/tooltip/black_arrow.png);\n"+
+    		"	font-size:12px;\n"+
+    		"	height:70px;\n"+
+    		"	width:160px;\n"+
+    		"	padding:15px;\n"+
+    		"	color:#eee;\n"+
+  			"}\n"+
+
+		"\n</style>"
+		);
+	  }
+  	})
+
 }
