@@ -64,16 +64,6 @@ function addCssScript(url) {
 	  	var css = response.responseText;
 		$("head").append("<style type='text/css'>\n"+
 			css +
-			".tooltip {\n"+
-    		"	display:none;\n"+
-    		"	background:transparent url(http://jquerytools.org/media/img/tooltip/black_arrow.png);\n"+
-    		"	font-size:12px;\n"+
-    		"	height:70px;\n"+
-    		"	width:160px;\n"+
-    		"	padding:15px;\n"+
-    		"	color:#eee;\n"+
-  			"}\n"+
-
 		"\n</style>"
 		);
 	  }
