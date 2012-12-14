@@ -2,7 +2,7 @@
 // @name        Mercado Livre Enhancement
 // @namespace   taksan
 // @include     http://*mercadolivre.com.br/*
-// @version     1
+// @version     1.01
 // @require		http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js
 // @require		https://raw.github.com/taksan/objective-monkey-utils/master/keyboarNavigation.js
 // @require     http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js
