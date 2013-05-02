@@ -2,7 +2,7 @@
 // @name        Mercado Livre Enhancement
 // @namespace   taksan
 // @include     http://*mercadolivre.com.br/*
-// @version     1.01
+// @version     1.02
 // @require		http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js
 // @require		https://raw.github.com/taksan/objective-monkey-utils/master/keyboarNavigation.js
 // @require     http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js
@@ -21,7 +21,6 @@ function main() {
 		   addExtraInfo(adLink, $(v).find('li.extra-info-location'));
 		}
 	})
-	addCssScript('https://raw.github.com/taksan/objective-monkey-utils/master/qualificacao.css');
 }
 
 function addExtraInfo(url, v) {
@@ -33,7 +32,7 @@ function addExtraInfo(url, v) {
 		  var sellerId = response.responseText.replace(/.*sellerId=([0-9]*).*/,"$1").trim()
 		  var actualLocation = responseData.find('dd.where').text().trim();
 		  $(v).text(actualLocation)
-		  var rep=responseData.find("p.meter")
+		  var rep=responseData.find("img.meter")
 		  $(v).after(rep)
 		  sellerData="http://produto.mercadolivre.com.br/reputation/showLayer.html?sellerId="+sellerId+"&x=x";
 		  GM_xmlhttpRequest({
